@@ -4,6 +4,7 @@ from .models import User, Employee, Employer
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from .forms import EmployeeSignUpForm, EmployerSignUpForm
 
 
@@ -47,10 +48,18 @@ def login_view(request):
                 messages.error(request, "Invalid username or password.")
         else:
             messages.error(request, "Invalid username or password.")
-    return render(request, '../templates/login',
+    return render(request, '../templates/login.html',
                   context={'form': AuthenticationForm()})
 
 
 def logout_view(request):
     logout(request)
     return redirect('/')
+
+
+@login_required
+def profile(request):
+    if request.user.is_employee:
+        return render(request, 'employee_profile.html')
+    elif request.user.is_employer:
+        return render(request, 'employer_profile.html')

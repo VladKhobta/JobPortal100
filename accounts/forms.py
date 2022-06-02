@@ -8,7 +8,6 @@ class EmployerSignUpForm(UserCreationForm):
     designation = forms.CharField(required=True)
     location = forms.CharField(required=True)
     phone_number = forms.CharField(required=True)
-    location = forms.CharField(required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -40,7 +39,7 @@ class EmployeeSignUpForm(UserCreationForm):
         user = super().save(commit=False)
         user.is_employee = True
         user.save()
-        employee = Employer.objects.create(user=user)
+        employee = Employee.objects.create(user=user)
         employee.first_name = self.cleaned_data.get('first_name')
         employee.last_name = self.cleaned_data.get('last_name')
         employee.phone_number = self.cleaned_data.get('phone_number')
